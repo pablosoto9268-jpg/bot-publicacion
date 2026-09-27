@@ -6,7 +6,13 @@ def generar_contenido():
     api_key = os.getenv("GEMINI_API_KEY")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
     
-    prompt = "Eres un experto en redes sociales. Escribe un consejo corto de 2 párrafos sobre tecnología y productividad, ideal para Facebook. Escribe de forma directa."
+   prompt = """
+Actúa como un creador de contenido para una página de Facebook sobre la cultura chola y urbana en México. 
+Escribe una reflexión corta, profunda y callejera sobre la lealtad, el respeto, la familia, el barrio o la superación personal.
+El texto debe ser viral, auténtico y directo. 
+Incluye emojis (como 💯, 🙏, 🎭, 👊). 
+Entrégame SOLO el texto final listo para publicar en Facebook, sin saludos ni comillas.
+"""
     
     payload = {
         "contents": [{"parts": [{"text": prompt}]}]
