@@ -1,27 +1,32 @@
 import os
-
 import requests
-from openai import OpenAI
+import google.generativeai as genai
 
+# Configurar la API de Gemini usando tu secreto de GitHub
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-def main() -> None:
-    api_key = os.getenv("OPENAI_API_KEY")
-    webhook_url = os.getenv("WEBHOOK_URL")
+def generar_contenido():
+    # Usamos el modelo de Gemini
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    prompt = "Eres un experto en redes sociales. Escribe un consejo corto de 2 párrafos sobre tecnología y productividad, ideal para Facebook. Escribe de forma directa, sin saludos ni hashtags excesivos."
+    
+    respuesta = model.generate_content(prompt)
+    return respuesta.text
 
-    if not api_key:
-        raise RuntimeError("OPENAI_API_KEY no está configurada")
-    if not webhook_url:
-        raise RuntimeError("WEBHOOK_URL no está configurada")
-
-    client = OpenAI(api_key=api_key)
-    response = client.responses.create(
-        model="gpt-4o-mini",
-        input="Genera un texto corto y amigable para una publicación automática.",
-    )
-
-    generated_text = response.output_text.strip()
-    requests.post(webhook_url, json={"text": generated_text}, timeout=30).raise_for_status()
-
+def publicar(texto):
+    # Obtiene la URL de Make.com de tus secretos
+    url_destino = os.getenv("WEBHOOK_URL") 
+    
+    # Prepara el texto para enviarlo a Make
+    payload = {"contenido": texto}
+    respuesta = requests.post(url_destino, json=payload)
+    
+    if respuesta.status_code in [200, 201, 202]:
+        print("¡Enviado a Make con éxito!")
+    else:
+        print(f"Error al enviar: {respuesta.status_code} - {respuesta.text}")
 
 if __name__ == "__main__":
-    main()
+    post_generado = generar_contenido()
+    print("Contenido generado:\n", post_generado)
+    publicar(post_generado)
