@@ -25,3 +25,9 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: python bot.py
+
+      - name: Enviar mensaje de prueba a Make
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"command": "run", "message": "Nueva publicación de prueba desde GitHub"}' \
+          https://hook.us2.make.com/gkdah76ctpp6oiyw5y0yukmoklg26b8m
