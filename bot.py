@@ -2,7 +2,6 @@ import os
 import requests
 
 def generar_contenido():
-    # Nos conectamos directo a la API sin usar librerías de terceros
     api_key = os.getenv("GEMINI_API_KEY")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
 
@@ -11,7 +10,7 @@ def generar_contenido():
     Escribe una reflexión corta, profunda y callejera sobre la lealtad, el respeto, la familia, el barrio o la superación personal.
     El texto debe ser viral, auténtico y directo. 
     Incluye emojis (como 💯, 🙏, 🎭, 👊). 
-    Entrégame SOLO el texto final listo para publicar en Facebook, sin saludos ni comillas.
+    Entrégrami SOLO el texto final listo para publicar en Facebook, sin saludos ni comillas.
     """
 
     payload = {
@@ -32,7 +31,11 @@ def generar_contenido():
 
 def publicar(texto):
     url_destino = os.getenv("WEBHOOK_URL")
-    payload = {"contenido": texto}
+    # Mandamos el texto y un comando o indicador para activar el flujo en Make
+    payload = {
+        "contenido": texto,
+        "command": "run"
+    }
     
     respuesta = requests.post(url_destino, json=payload)
 
