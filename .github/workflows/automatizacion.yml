@@ -20,12 +20,6 @@ jobs:
       - name: Instalar librerías necesarias
         run: pip install google-generativeai requests
 
-      - name: Enviar mensaje de prueba a Make
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -d '{"command": "run", "message": "Nueva publicación de prueba desde GitHub"}' \
-          https://hook.us2.make.com/gkdah76ctpp6oiyw5y0yukmoklg26b8m
-
       - name: Ejecutar la Inteligencia Artificial y Enviar a Make
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
